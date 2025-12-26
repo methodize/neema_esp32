@@ -1,0 +1,28 @@
+# Arduino build artifacts
+*.hex
+*.elf
+*.bin
+*.map
+
+# Arduino IDE
+.DS_Store
+*.swp
+*~.nib
+
+# Build directories
+build/
+.build/
+
+# IDE project files
+.vscode/
+.idea/
+
+# Compiled Object files
+*.o
+*.obj
+
+# Libraries (uncomment if you want to exclude)
+# libraries/
+
+# Platform-specific
+Thumbs.db
