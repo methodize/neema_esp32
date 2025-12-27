@@ -39,11 +39,11 @@
 
 #include <AccelStepper.h>
 
-// Pin definitions (ESP32-S3 safe pins)
+// Pin definitions (ESP32-S3 pins)
 const int POT_PIN = A0;           // Potentiometer analog input (GPIO1)
-const int STEP_PIN = 5;           // Step pulse pin (GPIO5)
-const int DIR_PIN = 6;            // Direction pin (GPIO6)
-const int ENABLE_PIN = 7;         // Enable pin (GPIO7)
+const int STEP_PIN = 3;           // Step pulse pin (GPIO3 / D3)
+const int DIR_PIN = 2;            // Direction pin (GPIO2 / D2)
+const int ENABLE_PIN = 4;         // Enable pin (GPIO4 / D4)
 
 // Stepper motor configuration
 const int STEPS_PER_REVOLUTION = 200;  // 17HS19-2004S1: 1.8° per step = 200 steps/rev
