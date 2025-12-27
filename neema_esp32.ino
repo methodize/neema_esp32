@@ -61,9 +61,10 @@ const int ROTATION_RANGE = TOTAL_STEPS / 2;  // 180° range for blinds tilt
 
 // Potentiometer reading configuration
 // ESP32-S3 has 12-bit ADC (0-4095 range) vs 10-bit (0-1023) on Arduino
-const int POT_DEADBAND = 10;       // Analog read tolerance to reduce jitter (higher for 12-bit ADC)
+const int POT_DEADBAND = 25;       // Analog read tolerance to reduce jitter (higher for 12-bit ADC)
 const int POT_MIN = 0;             // Minimum pot value
 const int POT_MAX = 4095;          // Maximum pot value (ESP32 12-bit ADC)
+const int POT_SAMPLES = 5;         // Number of samples to average for smoothing
 
 // Initialize stepper with DRIVER interface (step, direction pins)
 AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
@@ -72,6 +73,16 @@ AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
 int lastPotValue = -1;
 int currentPotValue = 0;
 long targetPosition = 0;
+
+// Potentiometer smoothing function
+int readSmoothedPot() {
+  long sum = 0;
+  for (int i = 0; i < POT_SAMPLES; i++) {
+    sum += analogRead(POT_PIN);
+    delayMicroseconds(100);  // Small delay between samples
+  }
+  return sum / POT_SAMPLES;
+}
 
 void setup() {
   Serial.begin(115200);
@@ -109,8 +120,8 @@ void setup() {
 }
 
 void loop() {
-  // Read potentiometer value (ESP32 has 12-bit ADC: 0-4095)
-  currentPotValue = analogRead(POT_PIN);
+  // Read potentiometer value with smoothing (ESP32 has 12-bit ADC: 0-4095)
+  currentPotValue = readSmoothedPot();
 
   // Only update if the value has changed beyond the deadband
   if (abs(currentPotValue - lastPotValue) > POT_DEADBAND) {
